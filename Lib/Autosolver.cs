@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Lib
@@ -35,7 +35,7 @@ namespace Lib
         private static void Autosolve(
             AutosolverConfig config,
             Func<Code, Score> attempt,
-            IReadOnlyList<Code> set)
+            IImmutableList<Code> set)
         {
             var guess =
                 set.Count == Mastermind.AllCodes.Count ? InitialGuess :
@@ -50,14 +50,14 @@ namespace Lib
 
             var filteredSet = set
                 .Where(code => Mastermind.EvaluateGuess(code, guess).Equals(score))
-                .ToList();
+                .ToImmutableList();
 
             Autosolve(config, attempt, filteredSet);
         }
 
         private static Code CalculateNewGuess(
             AutosolverConfig config,
-            IReadOnlyList<Code> set)
+            IImmutableList<Code> set)
         {
             var best = Mastermind.AllCodes.Aggregate(
                 Tuple.Create(int.MaxValue, InitialGuess),

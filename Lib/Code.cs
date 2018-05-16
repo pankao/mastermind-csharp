@@ -1,16 +1,16 @@
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace Lib
 {
     public class Code
     {
-        public Code(Peg peg0, Peg peg1, Peg peg2, Peg peg3)
+        public Code(Peg p0, Peg p1, Peg p2, Peg p3)
         {
-            Pegs = new[] { peg0, peg1, peg2, peg3 };
+            Pegs = ImmutableList.Create(p0, p1, p2, p3);
         }
 
-        public IEnumerable<Peg> Pegs { get; }
+        public IImmutableList<Peg> Pegs { get; }
 
         public override bool Equals(object rhs)
         {
@@ -20,18 +20,16 @@ namespace Lib
 
         public override int GetHashCode()
         {
-            var ps = Pegs.ToList();
             return
-                ps[0].GetHashCode() * 8976553 ^
-                ps[1].GetHashCode() * 33456 ^
-                ps[2].GetHashCode() * 57246351 ^
-                ps[3].GetHashCode() * 1865874;
+                Pegs[0].GetHashCode() * 8976553 ^
+                Pegs[1].GetHashCode() * 33456 ^
+                Pegs[2].GetHashCode() * 57246351 ^
+                Pegs[3].GetHashCode() * 1865874;
         }
 
         public override string ToString()
         {
-            var ps = Pegs.Cast<int>().ToList();
-            return $"{ps[0]}{ps[1]}{ps[2]}{ps[3]}";
+            return $"{(int)Pegs[0]}{(int)Pegs[1]}{(int)Pegs[2]}{(int)Pegs[3]}";
         }
     }
 }
