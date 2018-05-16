@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using Lib;
+using Mastermind;
 
 namespace Tests
 {
@@ -16,7 +16,7 @@ namespace Tests
             var guesses = new List<(Code guess, Score score)>();
             Autosolver.Autosolve(config, guess =>
             {
-                var score = Lib.Mastermind.EvaluateGuess(secret, guess);
+                var score = Mastermind.Logic.EvaluateGuess(secret, guess);
                 guesses.Add((guess, score));
                 return score;
             });
@@ -29,12 +29,12 @@ namespace Tests
         [Fact]
         public void RandomSecret()
         {
-            var secret = Mastermind.GenerateSecret();
+            var secret = Mastermind.Logic.GenerateSecret();
             var config = new AutosolverConfig(true, 8, 2);
             var guesses = new List<(Code guess, Score score)>();
             Autosolver.Autosolve(config, guess =>
             {
-                var score = Lib.Mastermind.EvaluateGuess(secret, guess);
+                var score = Mastermind.Logic.EvaluateGuess(secret, guess);
                 guesses.Add((guess, score));
                 return score;
             });

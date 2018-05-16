@@ -2,7 +2,7 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Lib
+namespace Mastermind
 {
     public class AutosolverConfig
     {
@@ -27,7 +27,7 @@ namespace Lib
             AutosolverConfig config,
             Func<Code, Score> attempt)
         {
-            Autosolve(config, attempt, Mastermind.AllCodes);
+            Autosolve(config, attempt, Logic.AllCodes);
         }
 
         private static Code InitialGuess = new Code(Peg.Red, Peg.Red, Peg.Green, Peg.Green);
@@ -38,7 +38,7 @@ namespace Lib
             IImmutableList<Code> set)
         {
             var guess =
-                set.Count == Mastermind.AllCodes.Count ? InitialGuess :
+                set.Count == Logic.AllCodes.Count ? InitialGuess :
                 set.Count == 1 ? set.First() : CalculateNewGuess(config, set);
 
             var score = attempt(guess);
@@ -49,7 +49,7 @@ namespace Lib
             }
 
             var filteredSet = set
-                .Where(code => Mastermind.EvaluateGuess(code, guess).Equals(score))
+                .Where(code => Logic.EvaluateGuess(code, guess).Equals(score))
                 .ToImmutableList();
 
             Autosolve(config, attempt, filteredSet);
@@ -59,15 +59,15 @@ namespace Lib
             AutosolverConfig config,
             IImmutableList<Code> set)
         {
-            var best = Mastermind.AllCodes.Aggregate(
+            var best = Logic.AllCodes.Aggregate(
                 Tuple.Create(int.MaxValue, InitialGuess),
                 (currentBest, unusedCode) =>
             {
-                var max = Mastermind.AllScores.Aggregate(
+                var max = Logic.AllScores.Aggregate(
                     0,
                     (currentMax, score) =>
                 {
-                    var thisMax = set.Count(code => Mastermind.EvaluateGuess(unusedCode, code).Equals(score));
+                    var thisMax = set.Count(code => Logic.EvaluateGuess(unusedCode, code).Equals(score));
                     return Math.Max(currentMax, thisMax);
                 });
                 return (max < currentBest.Item1) ? Tuple.Create(max, unusedCode) : currentBest;

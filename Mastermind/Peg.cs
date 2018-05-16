@@ -1,4 +1,4 @@
-namespace Lib
+namespace Mastermind
 {
     public enum Peg
     {

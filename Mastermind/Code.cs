@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Lib
+namespace Mastermind
 {
     public class Code
     {

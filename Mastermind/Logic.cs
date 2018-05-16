@@ -2,9 +2,9 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Lib
+namespace Mastermind
 {
-    public static class Mastermind
+    public static class Logic
     {
         public static Code GenerateSecret()
         {

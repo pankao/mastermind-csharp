@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lib;
 
 namespace Mastermind
 {
@@ -14,7 +13,7 @@ namespace Mastermind
             Console.WriteLine($"secret: {secret}");
             Autosolver.Autosolve(config, guess =>
             {
-                var score = Lib.Mastermind.EvaluateGuess(secret, guess);
+                var score = Logic.EvaluateGuess(secret, guess);
                 guesses.Add((guess, score));
                 return score;
             });
