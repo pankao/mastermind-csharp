@@ -59,11 +59,11 @@ namespace Mastermind
             AutosolverConfig config,
             IImmutableList<Code> set)
         {
-            var best = Logic.AllCodes.AsParallel().Aggregate(
+            var best = Logic.AllCodes.Aggregate(
                 Tuple.Create(int.MaxValue, InitialGuess),
                 (currentBest, unusedCode) =>
             {
-                var max = Logic.AllScores.AsParallel().Aggregate(
+                var max = Logic.AllScores.Aggregate(
                     0,
                     (currentMax, score) =>
                 {
