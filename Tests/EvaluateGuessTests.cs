@@ -35,5 +35,45 @@ namespace Tests
             Assert.Equal(0, score.Blacks);
             Assert.Equal(4, score.Whites);
         }
+
+        [Fact]
+        public void Scenario1()
+        {
+            var secret = new Code(Peg.Green, Peg.Green, Peg.Blue, Peg.Blue);
+            var guess = new Code(Peg.Blue, Peg.Blue, Peg.Green, Peg.Green);
+            var score = Mastermind.EvaluateGuess(secret, guess);
+            Assert.Equal(0, score.Blacks);
+            Assert.Equal(4, score.Whites);
+        }
+
+        [Fact]
+        public void Scenario2()
+        {
+            var secret = new Code(Peg.Green, Peg.Green, Peg.Blue, Peg.Blue);
+            var guess = new Code(Peg.Blue, Peg.Blue, Peg.Green, Peg.Yellow);
+            var score = Mastermind.EvaluateGuess(secret, guess);
+            Assert.Equal(0, score.Blacks);
+            Assert.Equal(3, score.Whites);
+        }
+
+        [Fact]
+        public void Scenario3()
+        {
+            var secret = new Code(Peg.Green, Peg.Green, Peg.Blue, Peg.Yellow);
+            var guess = new Code(Peg.Blue, Peg.Blue, Peg.Green, Peg.Green);
+            var score = Mastermind.EvaluateGuess(secret, guess);
+            Assert.Equal(0, score.Blacks);
+            Assert.Equal(3, score.Whites);
+        }
+
+        [Fact]
+        public void Scenario4()
+        {
+            var secret = new Code(Peg.Blue, Peg.Yellow, Peg.White, Peg.White);
+            var guess = new Code(Peg.Blue, Peg.White, Peg.Yellow, Peg.Yellow);
+            var score = Mastermind.EvaluateGuess(secret, guess);
+            Assert.Equal(1, score.Blacks);
+            Assert.Equal(2, score.Whites);
+        }
     }
 }
