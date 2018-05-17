@@ -23,19 +23,24 @@ namespace Mastermind
 
     public static class Autosolver
     {
-        public static void Autosolve(
+        public static IImmutableList<Tuple<Code, Score>> Autosolve(
             AutosolverConfig config,
             Func<Code, Score> attempt)
         {
-            Autosolve(config, attempt, Logic.AllCodes);
+            return Autosolve(
+                config,
+                attempt,
+                Logic.AllCodes,
+                ImmutableList<Tuple<Code, Score>>.Empty);
         }
 
         private static Code InitialGuess = new Code(Peg.Red, Peg.Red, Peg.Green, Peg.Green);
 
-        private static void Autosolve(
+        private static IImmutableList<Tuple<Code, Score>> Autosolve(
             AutosolverConfig config,
             Func<Code, Score> attempt,
-            IImmutableList<Code> set)
+            IImmutableList<Code> set,
+            IImmutableList<Tuple<Code, Score>> guesses)
         {
             var guess =
                 set.Count == Logic.AllCodes.Count ? InitialGuess :
@@ -43,16 +48,18 @@ namespace Mastermind
 
             var score = attempt(guess);
 
+            var updatedGuesses = guesses.Add(Tuple.Create(guess, score));
+
             if (score.Blacks == 4)
             {
-                return;
+                return updatedGuesses;
             }
 
-            var filteredSet = set
+            var updatedSet = set
                 .Where(code => Logic.EvaluateGuess(code, guess).Equals(score))
                 .ToImmutableList();
 
-            Autosolve(config, attempt, filteredSet);
+            return Autosolve(config, attempt, updatedSet, updatedGuesses);
         }
 
         private static Code CalculateNewGuess(
