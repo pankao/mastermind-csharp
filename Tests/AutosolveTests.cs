@@ -8,18 +8,13 @@ namespace Tests
 {
     public class AutosolveTests
     {
+        private static AutosolverConfig config = new AutosolverConfig(true, 8, 2);
+
         [Fact]
         public void FixedSecret()
         {
             var secret = new Code(Peg.Green, Peg.Blue, Peg.Black, Peg.White);
-            var config = new AutosolverConfig(true, 8, 2);
-            var guesses = new List<(Code guess, Score score)>();
-            Autosolver.Autosolve(config, guess =>
-            {
-                var score = Mastermind.Logic.EvaluateGuess(secret, guess);
-                guesses.Add((guess, score));
-                return score;
-            });
+            var guesses = Autosolver.Autosolve(config, guess => Mastermind.Logic.EvaluateGuess(secret, guess));
             Assert.True(guesses.Count <= 5);
             Assert.Equal(secret, guesses.Last().guess);
             Assert.Equal(4, guesses.Last().score.Blacks);
@@ -30,14 +25,7 @@ namespace Tests
         public void RandomSecret()
         {
             var secret = Mastermind.Logic.GenerateSecret();
-            var config = new AutosolverConfig(true, 8, 2);
-            var guesses = new List<(Code guess, Score score)>();
-            Autosolver.Autosolve(config, guess =>
-            {
-                var score = Mastermind.Logic.EvaluateGuess(secret, guess);
-                guesses.Add((guess, score));
-                return score;
-            });
+            var guesses = Autosolver.Autosolve(config, guess => Mastermind.Logic.EvaluateGuess(secret, guess));
             Assert.True(guesses.Count <= 5);
             Assert.Equal(secret, guesses.Last().guess);
             Assert.Equal(4, guesses.Last().score.Blacks);

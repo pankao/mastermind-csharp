@@ -19,7 +19,7 @@ namespace Mastermind
             stopwatch.Stop();
 
             Console.WriteLine($"Number of guesses: {guesses.Count}");
-            guesses.ForEach(tuple => Console.WriteLine($"guess: {tuple.Item1} score: {tuple.Item2}"));
+            guesses.ForEach(tuple => Console.WriteLine($"guess: {tuple.guess} score: {tuple.score}"));
             Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds}ms");
         }
     }
