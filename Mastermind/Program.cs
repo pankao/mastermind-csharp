@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 
@@ -15,7 +14,7 @@ namespace Mastermind
             Console.WriteLine($"secret: {secret}");
 
             var stopwatch = Stopwatch.StartNew();
-            var guesses = Autosolver.Autosolve(config, guess => Logic.EvaluateGuess(secret, guess)).ToList();
+            var guesses = Autosolver.Autosolve(config, guess => Logic.EvaluateScore(secret, guess)).ToList();
             stopwatch.Stop();
 
             Console.WriteLine($"Number of guesses: {guesses.Count}");

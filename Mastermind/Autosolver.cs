@@ -56,7 +56,7 @@ namespace Mastermind
             }
 
             var updatedSet = set
-                .Where(code => Logic.EvaluateGuess(code, guess).Equals(score))
+                .Where(code => Logic.EvaluateScore(code, guess).Equals(score))
                 .ToImmutableList();
 
             return Autosolve(config, attempt, updatedSet, updatedGuesses);
@@ -74,7 +74,7 @@ namespace Mastermind
                     0,
                     (currentMax, score) =>
                 {
-                    var thisMax = set.Count(code => Logic.EvaluateGuess(unusedCode, code).Equals(score));
+                    var thisMax = set.Count(code => Logic.EvaluateScore(unusedCode, code).Equals(score));
                     return Math.Max(currentMax, thisMax);
                 });
                 return (max < currentBest.Item1) ? Tuple.Create(max, unusedCode) : currentBest;
