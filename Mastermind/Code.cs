@@ -29,7 +29,11 @@ namespace Mastermind
 
         public override string ToString()
         {
-            return $"{(int)Pegs[0]}{(int)Pegs[1]}{(int)Pegs[2]}{(int)Pegs[3]}";
+            var p0 = Pegs[0].ToFriendlyString();
+            var p1 = Pegs[1].ToFriendlyString();
+            var p2 = Pegs[2].ToFriendlyString();
+            var p3 = Pegs[3].ToFriendlyString();
+            return $"{p0}-{p1}-{p2}-{p3}";
         }
     }
 }

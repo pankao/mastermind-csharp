@@ -26,7 +26,7 @@ namespace Mastermind
 
         public override string ToString()
         {
-            return $"{Blacks}{Whites}";
+            return new string('B', Blacks) + new string('W', Whites);
         }
     }
 }
