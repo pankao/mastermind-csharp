@@ -4,31 +4,12 @@ using System.Linq;
 
 namespace Mastermind
 {
-    public class AutosolverConfig
-    {
-        public AutosolverConfig(
-            bool enableParallelism,
-            int numThreads,
-            int setSizeThreshold)
-        {
-            EnableParallelism = enableParallelism;
-            NumThreads = numThreads;
-            SetSizeThreshold = setSizeThreshold;
-        }
-
-        public bool EnableParallelism { get; }
-        public int NumThreads { get; }
-        public int SetSizeThreshold { get; }
-    }
-
     public static class Autosolver
     {
         public static IImmutableList<(Code guess, Score score)> Autosolve(
-            AutosolverConfig config,
             Func<Code, Score> attempt)
         {
-            return Autosolve(
-                config,
+            return RecursiveSolveStep(
                 attempt,
                 Logic.AllCodes,
                 ImmutableList<(Code, Score)>.Empty);
@@ -36,48 +17,45 @@ namespace Mastermind
 
         private static Code InitialGuess = new Code(Peg.Red, Peg.Red, Peg.Green, Peg.Green);
 
-        private static IImmutableList<(Code, Score)> Autosolve(
-            AutosolverConfig config,
+        private static IImmutableList<(Code, Score)> RecursiveSolveStep(
             Func<Code, Score> attempt,
-            IImmutableList<Code> set,
-            IImmutableList<(Code, Score)> guesses)
+            IImmutableList<Code> untried,
+            IImmutableList<(Code, Score)> history)
         {
             var guess =
-                set.Count == Logic.AllCodes.Count ? InitialGuess :
-                set.Count == 1 ? set.First() : CalculateNewGuess(config, set);
+                untried.Count == Logic.AllCodes.Count ? InitialGuess :
+                untried.Count == 1 ? untried.First() : CalculateNewGuess(untried);
 
             var score = attempt(guess);
 
-            var updatedGuesses = guesses.Add((guess, score));
+            var newHistory = history.Add((guess, score));
 
             if (score.Blacks == 4)
             {
-                return updatedGuesses;
+                return newHistory;
             }
 
-            var updatedSet = set
+            var newUntried = untried
                 .Where(code => Logic.EvaluateScore(code, guess).Equals(score))
                 .ToImmutableList();
 
-            return Autosolve(config, attempt, updatedSet, updatedGuesses);
+            return RecursiveSolveStep(attempt, newUntried, newHistory);
         }
 
-        private static Code CalculateNewGuess(
-            AutosolverConfig config,
-            IImmutableList<Code> set)
+        private static Code CalculateNewGuess(IImmutableList<Code> untried)
         {
             var best = Logic.AllCodes.Aggregate(
                 Tuple.Create(int.MaxValue, InitialGuess),
-                (currentBest, unusedCode) =>
+                (currentBest, allCode) =>
             {
-                var max = Logic.AllScores.Aggregate(
+                var maxCount = Logic.AllScores.Aggregate(
                     0,
                     (currentMax, score) =>
                 {
-                    var thisMax = set.Count(code => Logic.EvaluateScore(unusedCode, code).Equals(score));
-                    return Math.Max(currentMax, thisMax);
+                    var count = untried.Count(code => Logic.EvaluateScore(allCode, code).Equals(score));
+                    return Math.Max(currentMax, count);
                 });
-                return (max < currentBest.Item1) ? Tuple.Create(max, unusedCode) : currentBest;
+                return (maxCount < currentBest.Item1) ? Tuple.Create(maxCount, allCode) : currentBest;
             });
             return best.Item2;
         }
