@@ -6,9 +6,11 @@ namespace Mastermind
 {
     public static class Logic
     {
-        public static Code GenerateSecret()
+        private static Random Random = new Random();
+
+        public static Code RandomSecret()
         {
-            return new Code(Peg.Red, Peg.Red, Peg.Green, Peg.Green);
+            return AllCodes[Random.Next(0, AllCodes.Count)];
         }
 
         public static IImmutableList<Peg> AllPegs =

@@ -8,7 +8,7 @@ namespace Mastermind
     {
         static void Main(string[] args)
         {
-            var secret = new Code(Peg.Green, Peg.Blue, Peg.Black, Peg.White);
+            var secret = Logic.RandomSecret();
             Console.WriteLine($"secret: {secret}");
 
             Score attempt(Code guess)

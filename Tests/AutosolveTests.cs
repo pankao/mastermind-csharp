@@ -20,7 +20,7 @@ namespace Tests
         [Fact]
         public void RandomSecret()
         {
-            var secret = Mastermind.Logic.GenerateSecret();
+            var secret = Logic.RandomSecret();
             Score attempt(Code guess) => Logic.EvaluateScore(secret, guess);
             var history = Autosolver.Autosolve(attempt);
             Assert.True(history.Count <= 5);
